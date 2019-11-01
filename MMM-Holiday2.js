@@ -20,8 +20,8 @@ Module.register("MMM-Holiday2", {
         icon: "fa-calendar-o",
         custom: false,
         path: "modules/MMM-Holiday2/icons/24.png",
-		img: ""
-        
+	    img: "",
+        mode: "imperial"
     },
 
     getStyles: function() {
@@ -63,12 +63,21 @@ Module.register("MMM-Holiday2", {
         this.updateDom(this.config.initialLoadDelay);
     },
 
+    getFormatDate: function(allDate, rallDate) {
+        if (this.config.mode == 'metric') {
+            return rallDate;
+        } else {
+            return allDate;
+        }
+    },
+    
+    getTwoDigitDateFormat: function(monthOrDate) {
+        return (monthOrDate < 10) ? '0' + monthOrDate : '' + monthOrDate;
+    },
 
-    getDom: function() {
-    	
+    getDom: function() {    	
         var wrapper = document.createElement("table");
 		wrapper.classList.add("calendar-stack");
-		
 
         if (!this.loaded) {
             wrapper.innerHTML = "Gathering Holidays...";
@@ -76,7 +85,7 @@ Module.register("MMM-Holiday2", {
             return wrapper;
         }
          
-            if (this.config.useHeader != false) {
+        if (this.config.useHeader != false) {
             var header = document.createElement("header");
             header.classList.add("xsmall", "bright");
 			header.setAttribute('style','text-align: left');
@@ -95,12 +104,12 @@ Module.register("MMM-Holiday2", {
 
             //Today's date 
             var todayDate = mm + '/' + dd + '/' + yyyy;
-           
-            
+
            //date string from holiday[i] returned as mm/dd/yyyy
             var dt = new Date(holiday.start);
 
-            var allDate = (dt.getMonth() + 1) + "/" +  dt.getDate()+ "/" +dt.getFullYear();
+            var allDate = (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
+            var rallDate = this.getTwoDigitDateFormat(dt.getDate()) + "/" + this.getTwoDigitDateFormat(dt.getMonth() + 1) + "/" + dt.getFullYear();
             var DateDiff = {
                 inDays: function(d1, d2) {
                     var t2 = d2.getTime();
@@ -111,53 +120,52 @@ Module.register("MMM-Holiday2", {
             var d1 = new Date(todayDate);
             var d2 = new Date(allDate);
 			
-        var holidayWrapper = document.createElement("tr");
-      
-        var symbolWrapper = document.createElement("td");
-        if (this.config.img != "") {
-        var img = document.createElement("img");
-        img.classList.add("photo");
-        img.src = "modules/MMM-Holiday2/icons/"+this.config.img; 
-        symbolWrapper.appendChild(img);
-	    holidayWrapper.appendChild(symbolWrapper);	 
-        } else {
-        var symbol = document.createElement("i");
-		symbol.classList.add("symbol");
-         if (todayDate != allDate){
-        symbol.classList.add("fa", this.config.icon, "symbol");
-		} else {
-		symbol.classList.add("fa", "fa-bell-o", "icon");
-		}
-		symbolWrapper.appendChild(symbol);
-	    holidayWrapper.appendChild(symbolWrapper);
-		}
-        
-         
-        var HolidayColumn = document.createElement("td");   	
-	     if (this.holidays.length > 0) {
-          if (DateDiff.inDays(d1, d2) > -1 && DateDiff.inDays(d1, d2) <= this.config.days) {
-		   if (todayDate === allDate){
-		HolidayColumn.classList.add("bright", "xsmall", "today","row");	
-		HolidayColumn.innerHTML = "<font color=#ece96a>&nbsp;&nbsp;<b>"+allDate + "</b> ~ " + holiday.summary + " Today</font>";	
-		} else {
-		HolidayColumn.classList.add("bright", "xsmall", "holiday","row");	
-			if (DateDiff.inDays(d1,d2) == "1"){
-        HolidayColumn.innerHTML = "&nbsp;&nbsp;<b>"+allDate + "</b> ~ " + holiday.summary + " tomorrow!";		
-			} else {
-		HolidayColumn.classList.add("bright", "xsmall", "holiday","row");
-        HolidayColumn.innerHTML = "&nbsp;&nbsp;<b>"+allDate + "</b> ~ " + holiday.summary + " In <font color=#ffffff>" + DateDiff.inDays(d1, d2) + "</font> days";
-        }		
-		}
-        holidayWrapper.appendChild(HolidayColumn);
-        wrapper.appendChild(holidayWrapper);
+            var holidayWrapper = document.createElement("tr");
+
+            var symbolWrapper = document.createElement("td");
+            if (this.config.img != "") {
+                var img = document.createElement("img");
+                img.classList.add("photo");
+                img.src = "modules/MMM-Holiday2/icons/"+this.config.img; 
+                symbolWrapper.appendChild(img);
+                holidayWrapper.appendChild(symbolWrapper);	 
+            } else {
+                var symbol = document.createElement("i");
+                symbol.classList.add("symbol");
+                if (todayDate != allDate) {
+                    symbol.classList.add("fa", this.config.icon, "symbol");
+                } else {
+                    symbol.classList.add("fa", "fa-bell-o", "icon");
+                }
+                symbolWrapper.appendChild(symbol);
+                holidayWrapper.appendChild(symbolWrapper);
+            }
+
+            var HolidayColumn = document.createElement("td");   	
+            if (this.holidays.length > 0) {
+                if (DateDiff.inDays(d1, d2) > -1 && DateDiff.inDays(d1, d2) <= this.config.days) {
+                    if (todayDate === allDate){
+                        HolidayColumn.classList.add("bright", "xsmall", "today","row");	
+                        HolidayColumn.innerHTML = "<font color=#ece96a>&nbsp;&nbsp;<b>"+ this.getFormatDate(allDate, rallDate) + "</b> ~ " + holiday.summary + " Today</font>";	
+                    } else {
+                        HolidayColumn.classList.add("bright", "xsmall", "holiday","row");	
+                        if (DateDiff.inDays(d1,d2) == "1"){
+                            HolidayColumn.innerHTML = "&nbsp;&nbsp;<b>"+ this.getFormatDate(allDate, rallDate) + "</b> ~ " + holiday.summary + " tomorrow!";		
+                        } else {
+                            HolidayColumn.classList.add("bright", "xsmall", "holiday","row");
+                            HolidayColumn.innerHTML = "&nbsp;&nbsp;<b>"+ this.getFormatDate(allDate, rallDate) + "</b> ~ " + holiday.summary + " In <font color=#ffffff>" + DateDiff.inDays(d1, d2) + "</font> days";
+                        }		
+                    }
+                    holidayWrapper.appendChild(HolidayColumn);
+                    wrapper.appendChild(holidayWrapper);
+                }
+            } else {
+                var HolidayColumn = document.createElement("div");
+                HolidayColumn.classList.add("bright", "xsmall");
+                HolidayColumn.innerHTML = "No Upcoming Holidays";	
+                wrapper.appendChild(HolidayColumn);
+            }
         }
-        } else {
-	    var HolidayColumn = document.createElement("div");
-        HolidayColumn.classList.add("bright", "xsmall");
-		HolidayColumn.innerHTML = "No Upcoming Holidays";	
-        wrapper.appendChild(HolidayColumn);
-        }
-         }
         
         return wrapper;
     },
