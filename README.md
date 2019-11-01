@@ -25,8 +25,8 @@ Before we get started on the config let me point out some options:
      days:  How many days in advance should it look for holidays?
      icon:  What font-awesome icon would you like to use?
      custom: use your own icon... True or font-awesome: false 
-     img: Don't want font awesome icons...use your own!  There are many 
-          in the icons dir but you can add your own!
+     img: Don't want font awesome icons...use your own!  There are many in the icons dir but you can add your own!
+     mode: Imperial to show date mm/dd/yyyy or metric to show date dd/mm/yyyy
 
 # CONFIG
 
@@ -41,6 +41,7 @@ Before we get started on the config let me point out some options:
                 lang: "el",  //language code
                 days: '90'  //How many days in advance to show holidays for
                 img: "person.png"  //what is the name of your custom icon file, needs to be located in icons dir? 
+		mode: "imperial"  //imperial to show date mm/dd/yyyy or metric to show date dd/mm/yyyy
             }
         },
 
