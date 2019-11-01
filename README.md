@@ -41,7 +41,7 @@ Before we get started on the config let me point out some options:
                 lang: "el",  //language code
                 days: '90'  //How many days in advance to show holidays for
                 img: "person.png"  //what is the name of your custom icon file, needs to be located in icons dir? 
-		mode: "imperial"  //imperial to show date mm/dd/yyyy or metric to show date dd/mm/yyyy
+                mode: "imperial"  //imperial to show date mm/dd/yyyy or metric to show date dd/mm/yyyy
             }
         },
 
