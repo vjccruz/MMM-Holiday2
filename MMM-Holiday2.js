@@ -9,7 +9,7 @@ Module.register('MMM-Holiday2', {
   defaults: {
     updateInterval: 24 * 60 * 1000, // every 10 minutes
     animationSpeed: 10,
-    initialLoadDelay: 875, // 0 seconds delay
+    initialLoadDelay: 10, // 0 seconds delay
     retryDelay: 1500,
     fadeSpeed: 7,
     country: 'us',
@@ -50,8 +50,14 @@ Module.register('MMM-Holiday2', {
     this.getHolidays(this.config.initialLoadDelay)
   },
 
-  getHolidays: function () {
-    this.sendSocketNotification('GET_HOLIDAYS')
+  getHolidays: function (initialLoadDelay) {
+    if (initialLoadDelay) {
+      setTimeout(() => {
+        this.sendSocketNotification('GET_HOLIDAYS')
+      }, initialLoadDelay * 1000)
+    } else {
+      this.sendSocketNotification('GET_HOLIDAYS')
+    }
   },
 
   socketNotificationReceived: function (notification, payload) {
