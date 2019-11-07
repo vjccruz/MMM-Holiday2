@@ -27,6 +27,7 @@ Before we get started on the config let me point out some options:
      custom: use your own icon... True or font-awesome: false 
      img: Don't want font awesome icons...use your own!  There are many in the icons dir but you can add your own!
      mode: Imperial to show date mm/dd/yyyy or metric to show date dd/mm/yyyy
+     initialLoadDelay: Number of seconds to delay the initial load
 
 # CONFIG
 
